@@ -2,10 +2,21 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Profile
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('profile_image', 'country', 'city', 'address', 'phone_number', 'date_of_birth')
+        fields = (
+            'profile_image', 'country', 'city', 'address', 'phone_number', 'date_of_birth',
+            'kyc_document_type', 'kyc_document_image', 'kyc_status'
+        )
+
+class KYCSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ('kyc_document_type', 'kyc_document_image', 'kyc_status')
+        read_only_fields = ['kyc_status']
+
 
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()

@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 from django.contrib.auth.models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer , KYCSerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -9,6 +9,10 @@ from .serializers import RegisterSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from .models import Profile , Wallet , Transaction
+from rest_framework import generics
+
+from rest_framework.permissions import IsAuthenticated
 # View to retrieve and update the user's profile
 class UserProfileView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
@@ -49,3 +53,62 @@ class LogoutView(generics.GenericAPIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        # View for users to submit their KYC documents
+class KYCSubmissionView(generics.UpdateAPIView):
+    serializer_class = KYCSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user.profile
+
+# Admin view to approve/reject KYC
+class KYCAdminApprovalView(generics.UpdateAPIView):
+    serializer_class = KYCSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def get_object(self):
+        user_id = self.kwargs.get('user_id')
+        return Profile.objects.get(user__id=user_id)
+
+    def patch(self, request, *args, **kwargs):
+        profile = self.get_object()
+        status = request.data.get('kyc_status')
+        if status in ['APPROVED', 'REJECTED']:
+            profile.kyc_status = status
+            profile.save()
+            return Response({'message': f'KYC status set to {status}'}, status=status.HTTP_200_OK)
+        return Response({'error': 'Invalid KYC status'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class TransferFundsView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        sender = request.user
+        receiver_id = request.data.get('receiver_id')
+        amount = float(request.data.get('amount'))
+
+        try:
+            receiver = User.objects.get(id=receiver_id)
+            sender_wallet = Wallet.objects.get(user=sender)
+            receiver_wallet = Wallet.objects.get(user=receiver)
+
+            # Ensure sender has enough balance
+            if sender_wallet.balance >= amount:
+                # Perform the transaction
+                sender_wallet.withdraw(amount)
+                receiver_wallet.deposit(amount)
+
+                # Log the transaction
+                transaction = Transaction.objects.create(sender=sender, receiver=receiver, amount=amount, status='COMPLETED')
+
+                return Response({'message': 'Transfer successful'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Insufficient balance'}, status=status.HTTP_400_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response({'error': 'Receiver not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
