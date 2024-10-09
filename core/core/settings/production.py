@@ -13,7 +13,14 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+ROOT_URLCONF = 'core.urls'
 
+# Static and Media settings
+STATIC_URL = '/static/'
+STATIC_ROOT = '/home/badolo/backend-B/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = '/home/badolo/backend-B/media/'
 
 LOGGING = {
     'version': 1,
