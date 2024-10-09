@@ -20,12 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)dwx^5vfa=!cpjo1)^^&k(x60rh1^rajd#0&ibmc%s867b4%6a'
+#SECRET_KEY = 'django-insecure-)dwx^5vfa=!cpjo1)^^&k(x60rh1^rajd#0&ibmc%s867b4%6a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '75.119.133.13']
 
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -80,9 +81,7 @@ SECURE_HSTS_PRELOAD = True
 CSRF_COOKIE_SECURE = True
 
 
-ALLOWED_ADMIN_IPS = ['75.119.133.13']
-if 'DJANGO_SETTINGS_MODULE' in os.environ and not DEBUG:
-    MIDDLEWARE.insert(0, 'django_ip_restrict.middleware.IPRestrictMiddleware')
+
 
 ROOT_URLCONF = 'core.urls'
 
