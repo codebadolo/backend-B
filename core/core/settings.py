@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from .keep_safe import PROD_SECRET_KEY   , PROD_DATABASE_PASSWORD# Corrected the import statement
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-)dwx^5vfa=!cpjo1)^^&k(x60rh1^rajd#0&ibmc%s867b4%6a'
+SECRET_KEY = PROD_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
@@ -75,7 +76,16 @@ MIDDLEWARE = [
 ]
 
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'bitprod',
+        'USER': 'bitproduser',
+        'PASSWORD': PROD_DATABASE_PASSWORD,
+        'HOST': '75.119.133.13',  # Or another host if the database is remote
+        'PORT': '5432',
+    }
+}
 
 CSP_DEFAULT_SRC = ["'self'"]
 CSP_STYLE_SRC = ["'self'", 'maxcdn.bootstrapcdn.com']
