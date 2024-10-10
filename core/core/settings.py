@@ -72,6 +72,11 @@ MIDDLEWARE = [
    
 ]
 
+try:
+    from csp.middleware import CSPMiddleware
+    MIDDLEWARE.append('csp.middleware.CSPMiddleware')
+except ImportError:
+    pass
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
