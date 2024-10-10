@@ -60,7 +60,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-       'csp.middleware.CSPMiddleware',
+      # 'csp.middleware.CSPMiddleware',
+        'django_auto_logout.middleware.auto_logout',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -70,9 +71,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
    
 ]
-CSP_DEFAULT_SRC = ("'self'",)
-CSP_SCRIPT_SRC = ("'self'", 'ajax.googleapis.com')
-CSP_STYLE_SRC = ("'self'", 'fonts.googleapis.com')
+
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
