@@ -60,8 +60,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-      # 'csp.middleware.CSPMiddleware ' falso, 
-        'django_auto_logout.middleware.auto_logout',
+
+     
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -69,14 +69,18 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+       'csp.middleware.CSPMiddleware',  # Add this middleware directly
+    'django_auto_logout.middleware.auto_logout',
    
 ]
 
-try:
-    from csp.middleware import CSPMiddleware
-    MIDDLEWARE.append('csp.middleware.CSPMiddleware')
-except ImportError:
-    pass
+
+
+
+CSP_DEFAULT_SRC = ["'self'"]
+CSP_STYLE_SRC = ["'self'", 'maxcdn.bootstrapcdn.com']
+CSP_SCRIPT_SRC = ["'self'", 'code.jquery.com']
+
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
