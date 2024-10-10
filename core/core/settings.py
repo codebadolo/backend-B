@@ -60,7 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-      # 'csp.middleware.CSPMiddleware',
+      # 'csp.middleware.CSPMiddleware ' falso, 
         'django_auto_logout.middleware.auto_logout',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
