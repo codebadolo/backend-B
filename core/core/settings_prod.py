@@ -10,7 +10,7 @@ ALLOWED_HOSTS = ['75.119.133.13']
 
 
 
-DEBUG = True
+DEBUG = False
 
 DATABASES = {
     'default': {

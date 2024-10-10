@@ -25,11 +25,11 @@ SECRET_KEY = PROD_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '75.119.133.13']
+ALLOWED_HOSTS = [ '75.119.133.13']
 
 
 
-DEBUG = True
+DEBUG = False
 
 # Application definition
 
@@ -66,7 +66,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+ #   'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -163,6 +163,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = '/home/badolo/backend-B/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -187,3 +188,10 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = [
+    'http://75.119.133.13',
+    # Add other trusted origins here
+]

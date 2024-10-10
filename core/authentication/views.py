@@ -11,9 +11,13 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import Profile , Wallet , Transaction
 from rest_framework import generics
-
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from rest_framework.permissions import IsAuthenticated
 # View to retrieve and update the user's profile
+# 
+# 
+@method_decorator(csrf_exempt, name='dispatch')
 class UserProfileView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -22,11 +26,14 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
     
+
+@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]  # Allow anyone to register
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(TokenObtainPairView):
     @swagger_auto_schema(
         operation_description="Login to the application to obtain access and refresh tokens",
@@ -42,6 +49,9 @@ class LoginView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
     
+    
+    
+@method_decorator(csrf_exempt, name='dispatch')    
 class LogoutView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -56,6 +66,8 @@ class LogoutView(generics.GenericAPIView):
         
         
         # View for users to submit their KYC documents
+        # 
+@method_decorator(csrf_exempt, name='dispatch')        # 
 class KYCSubmissionView(generics.UpdateAPIView):
     serializer_class = KYCSerializer
     permission_classes = [IsAuthenticated]
@@ -64,6 +76,9 @@ class KYCSubmissionView(generics.UpdateAPIView):
         return self.request.user.profile
 
 # Admin view to approve/reject KYC
+# 
+# 
+@method_decorator(csrf_exempt, name='dispatch')# 
 class KYCAdminApprovalView(generics.UpdateAPIView):
     serializer_class = KYCSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -82,6 +97,7 @@ class KYCAdminApprovalView(generics.UpdateAPIView):
         return Response({'error': 'Invalid KYC status'}, status=status.HTTP_400_BAD_REQUEST)
     
     
+@method_decorator(csrf_exempt, name='dispatch')
 class TransferFundsView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
