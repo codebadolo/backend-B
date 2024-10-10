@@ -8,8 +8,9 @@ ALLOWED_HOSTS = ['75.119.133.13']
 
 # Use environment variables or hardcoded values for sensitive data
 
-DJANGO_DEBUG=True
 
+
+DEBUG = True
 
 DATABASES = {
     'default': {
