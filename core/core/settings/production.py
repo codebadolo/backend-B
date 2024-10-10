@@ -1,5 +1,6 @@
 from decouple import config
 from .base  import * 
+
 ALLOWED_HOSTS = [ '75.119.133.13']
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
