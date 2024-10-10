@@ -1,19 +1,27 @@
-from decouple import config
-from .base  import * 
+from .settings import *
+from .keep_safe import PROD_SECRET_KEY   , PROD_DATABASE_PASSWORD# Corrected the import statement
 
-ALLOWED_HOSTS = [ '75.119.133.13']
-SECRET_KEY = config('DJANGO_SECRET_KEY')
-DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
+# Use the imported PROD_SECRET_KEY
+SECRET_KEY = PROD_SECRET_KEY
+
+ALLOWED_HOSTS = ['75.119.133.13']
+
+# Use environment variables or hardcoded values for sensitive data
+
+DJANGO_DEBUG=True
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
+        'NAME': 'bitprod',
+        'USER': 'bitproduser',
+        'PASSWORD': PROD_DATABASE_PASSWORD,
         'HOST': '75.119.133.13',  # Or another host if the database is remote
         'PORT': '5432',
     }
 }
+
 ROOT_URLCONF = 'core.urls'
 
 # Static and Media settings
