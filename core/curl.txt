@@ -1,0 +1,11 @@
+curl -X 'POST' \
+  'http://127.0.0.1:8000/auth/register/' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -H 'X-CSRFToken: I1HxvrIYpZ0XlN5TEKFvBu5zsUey78S2jX9JV5ce8l78WKPMTgm8Lw7QG3cbjp0L' \
+  -d '{
+    "username": "use",
+    "email": "use@example.com",
+    "password": "pasord123"
+}
+'

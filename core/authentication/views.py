@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 from django.contrib.auth.models import User
-from .serializers import UserSerializer , KYCSerializer
+from .serializers import UserSerializer , KYCSerializer, EmptySerializer
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
@@ -17,6 +17,8 @@ from rest_framework.permissions import IsAuthenticated
 # View to retrieve and update the user's profile
 # 
 # 
+
+# Dummy Serializer for LogoutView (used for documentation purposes)
 @method_decorator(csrf_exempt, name='dispatch')
 class UserProfileView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
@@ -64,7 +66,11 @@ class LogoutView(generics.GenericAPIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        
+        # Avoid schema generation when generating Swagger/OpenAPI docs
+    def get_serializer_class(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return EmptySerializer
+        return None    
         # View for users to submit their KYC documents
         # 
 @method_decorator(csrf_exempt, name='dispatch')        # 
