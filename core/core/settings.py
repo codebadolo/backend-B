@@ -43,15 +43,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_countries',
-     'drf_yasg',
-     'drf_spectacular',
-    'authentication',
-    'rest_framework',
+    
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
-     'transaction',
+       'rest_framework',  # Make sure this is included
+    'django_countries',
+    
+    
+    
+    
+     'drf_spectacular',
+    'authentication',
 
+     'transaction',
+        'drf_yasg',
         
 ]
 
@@ -65,7 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-       'csp.middleware.CSPMiddleware',  # Add this middleware directly
+       #'csp.middleware.CSPMiddleware',  # Add this middleware directly
     'django_auto_logout.middleware.auto_logout',
    
 ]
@@ -92,10 +97,10 @@ DATABASES = {
 }
 
 
-CSP_DEFAULT_SRC = ["'self'"]
+'''CSP_DEFAULT_SRC = ["'self'"]
 CSP_STYLE_SRC = ["'self'", 'maxcdn.bootstrapcdn.com']
 CSP_SCRIPT_SRC = ["'self'", 'code.jquery.com']
-
+'''
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
@@ -183,6 +188,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
@@ -205,11 +211,19 @@ CSRF_TRUSTED_ORIGINS = [
     # Add other trusted origins here
 ]
 
-SWAGGER_SETTINGS = {
-   
-    'VALIDATOR_URL':    'http://127.0.0.1',
-}
+'''SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+   # 'LOGIN_URL': 'rest_framework:login',  # Configuring login URL for Swagger
+  #  'LOGOUT_URL': 'rest_framework:logout',  # Configuring logout URL for Swagger
+}'''
 
+REDOC_SETTINGS = {
+    'LAZY_RENDERING': True,
+}
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Your Project API',
     'DESCRIPTION': 'Your project description',
