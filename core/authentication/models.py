@@ -44,37 +44,3 @@ class Profile(models.Model):
             instance.profile.save()
 
     
-class Wallet(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    balance = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
-
-    def __str__(self):
-        return f'{self.user.username} - {self.balance}'
-
-    # Add funds to the wallet
-    def deposit(self, amount):
-        self.balance += amount
-        self.save()
-
-    # Remove funds from the wallet
-    def withdraw(self, amount):
-        if amount <= self.balance:
-            self.balance -= amount
-            self.save()
-        else:
-            raise ValueError("Insufficient funds")
-        
-        
-class Transaction(models.Model):
-    sender = models.ForeignKey(User, related_name='sent_transactions', on_delete=models.CASCADE)
-    receiver = models.ForeignKey(User, related_name='received_transactions', on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=12, decimal_places=2)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=[('PENDING', 'Pending'), ('COMPLETED', 'Completed')], default='PENDING')
-
-    def __str__(self):
-        return f'Transaction from {self.sender.username} to {self.receiver.username} for {self.amount}'
-        
-        
-
-        

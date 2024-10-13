@@ -1,12 +1,12 @@
 from django.contrib import admin
 from .models import Profile
 from django.utils.html import format_html
-#from unfold.admin import ModelAdmin
+from unfold.admin import ModelAdmin
 @admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(ModelAdmin):
     list_display = ('profile_image_tag' , 'user', 'kyc_status', 'kyc_document_type', 'country', 'city')
     search_fields = ('user__username', 'user__email', 'kyc_status')
-    list_filter = ('kyc_status', 'kyc_document_type', 'country')
+    #list_filter = ('kyc_status', 'kyc_document_type', 'country')
     readonly_fields = ('kyc_status',)
 
     # Show these fields in the form to add/edit a profile

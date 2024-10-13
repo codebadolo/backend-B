@@ -9,3 +9,18 @@ curl -X 'POST' \
     "password": "pasord123"
 }
 '
+
+curl -X 'POST' \
+'http://127.0.0.1:8000/auth/login/' \
+-H 'Content-Type: application/json' \
+-d '{
+"username": "bit",
+"password": "codebit"
+}'
+
+
+curl -X 'GET' \
+'http://127.0.0.1:8000/transaction/currencies/' \
+-H 'accept: application/json' \
+-H 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI4Nzg5MTUxLCJpYXQiOjE3Mjg3ODU1NTEsImp0aSI6IjM1MDhiNzUyZGU5NTRlMjc5MjQ4NGY1MDE4ZTI1M2I2IiwidXNlcl9pZCI6MX0.oNL4MKgbu92iSYpJ1CaZBv21FhLmU1P3D2B1WF0ZJBk' \
+-H 'X-CSRFToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcyODg3MTk1MSwiaWF0IjoxNzI4Nzg1NTUxLCJqdGkiOiIzZmFhY2ExNjA0YjM0YzFkYmFiNGZhM2E2MWY3YzczMCIsInVzZXJfaWQiOjF9.uoQ6IEDs-e4xRBDHjral2AiFlcEJvZoQ4JdWA_p22zk'

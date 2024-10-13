@@ -9,7 +9,7 @@ from .serializers import RegisterSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from .models import Profile , Wallet , Transaction
+from .models import Profile 
 from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -37,7 +37,7 @@ class RegisterView(generics.CreateAPIView):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginView(TokenObtainPairView):
-    @swagger_auto_schema(
+    '''    @swagger_auto_schema(
         operation_description="Login to the application to obtain access and refresh tokens",
         request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
@@ -47,7 +47,7 @@ class LoginView(TokenObtainPairView):
             }
         ),
         responses={200: openapi.Response('Success')}
-    )
+    )'''
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
     
@@ -101,36 +101,4 @@ class KYCAdminApprovalView(generics.UpdateAPIView):
             profile.save()
             return Response({'message': f'KYC status set to {status}'}, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid KYC status'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
-@method_decorator(csrf_exempt, name='dispatch')
-class TransferFundsView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        sender = request.user
-        receiver_id = request.data.get('receiver_id')
-        amount = float(request.data.get('amount'))
-
-        try:
-            receiver = User.objects.get(id=receiver_id)
-            sender_wallet = Wallet.objects.get(user=sender)
-            receiver_wallet = Wallet.objects.get(user=receiver)
-
-            # Ensure sender has enough balance
-            if sender_wallet.balance >= amount:
-                # Perform the transaction
-                sender_wallet.withdraw(amount)
-                receiver_wallet.deposit(amount)
-
-                # Log the transaction
-                transaction = Transaction.objects.create(sender=sender, receiver=receiver, amount=amount, status='COMPLETED')
-
-                return Response({'message': 'Transfer successful'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Insufficient balance'}, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({'error': 'Receiver not found'}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     

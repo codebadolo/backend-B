@@ -34,16 +34,9 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    
-    "unfold",  # before django.contrib.admin
-    #"unfold.contrib.filters",  # optional, if special filters are needed
-   # "unfold.contrib.forms",  # optional, if special form elements are needed
-   # "unfold.contrib.inlines",  # optional, if special inlines are needed
-   # "unfold.contrib.import_export",  # optional, if django-import-export package is used
-   # "unfold.contrib.guardian",  # optional, if django-guardian package is used
-   # "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
-    #"django.contrib.admin",  # required
-    
+        
+   # 'jazzmin',  # Add this at the top of your installed apps
+       
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,11 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_countries',
      'drf_yasg',
-    
+     'drf_spectacular',
     'authentication',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
+     'transaction',
 
         
 ]
@@ -210,3 +204,47 @@ CSRF_TRUSTED_ORIGINS = [
       'http://localhost',
     # Add other trusted origins here
 ]
+
+SWAGGER_SETTINGS = {
+   
+    'VALIDATOR_URL':    'http://127.0.0.1',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+    # 
+       "SWAGGER_UI_SETTINGS": {
+        "deepLinking": True,
+        "persistAuthorization": True,
+        "displayOperationId": True,
+        
+    },
+    # available SwaggerUI versions: https://github.com/swagger-api/swagger-ui/releases
+    "SWAGGER_UI_DIST": "https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest", # default
+
+}
+
+'''JAZZMIN_SETTINGS = {
+    "site_title": "BIT Admin",
+    "site_header": "BIT Administration",
+    "welcome_sign": "Welcome to BIT Admin",
+    "site_logo": "path_to_logo/logo.png",
+    "user_avatar": "path_to_profile_image",  # If you have a profile image for the user
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "transactions.Wallet": "fas fa-wallet",
+        "transactions.Transaction": "fas fa-exchange-alt",
+        "transactions.Currency": "fas fa-coins",
+    },
+    "custom_css": "custom.css",  # Add your custom CSS file if needed
+    "custom_js": "custom.js",  # Add your custom JS file if needed
+}
+'''

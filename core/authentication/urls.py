@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserProfileView  , RegisterView, LoginView, LogoutView , KYCSubmissionView , KYCAdminApprovalView , TransferFundsView
+from .views import UserProfileView  , RegisterView, LoginView, LogoutView , KYCSubmissionView , KYCAdminApprovalView 
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
@@ -13,5 +13,5 @@ urlpatterns = [
 
     # Admin can approve or reject KYC
     path('kyc/admin/<int:user_id>/', KYCAdminApprovalView.as_view(), name='kyc-admin-approval'),
-     path('transfer/', TransferFundsView.as_view(), name='transfer-funds'),
+
 ]
