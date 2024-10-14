@@ -107,7 +107,7 @@ SECURE_BROWSER_XSS_FILTER = True
 SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for one year
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 
 
@@ -173,8 +173,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT  = 'static/'
-#STATIC_ROOT = '/home/badolo/backend-B/static/'
+#STATIC_ROOT  = 'static/'
+STATIC_ROOT = '/home/badolo/backend-B/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -202,6 +202,8 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
 
 CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [

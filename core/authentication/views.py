@@ -19,7 +19,7 @@ from rest_framework.permissions import IsAuthenticated
 # 
 
 # Dummy Serializer for LogoutView (used for documentation purposes)
-@method_decorator(csrf_exempt, name='dispatch')
+
 class UserProfileView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -29,13 +29,12 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
         return self.request.user
     
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]  # Allow anyone to register
 
-@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(TokenObtainPairView):
     '''    @swagger_auto_schema(
         operation_description="Login to the application to obtain access and refresh tokens",
@@ -53,7 +52,7 @@ class LoginView(TokenObtainPairView):
     
     
     
-@method_decorator(csrf_exempt, name='dispatch')    
+    
 class LogoutView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -72,8 +71,7 @@ class LogoutView(generics.GenericAPIView):
             return EmptySerializer
         return None    
         # View for users to submit their KYC documents
-        # 
-@method_decorator(csrf_exempt, name='dispatch')        # 
+        #        # 
 class KYCSubmissionView(generics.UpdateAPIView):
     serializer_class = KYCSerializer
     permission_classes = [IsAuthenticated]
@@ -83,8 +81,7 @@ class KYCSubmissionView(generics.UpdateAPIView):
 
 # Admin view to approve/reject KYC
 # 
-# 
-@method_decorator(csrf_exempt, name='dispatch')# 
+#  
 class KYCAdminApprovalView(generics.UpdateAPIView):
     serializer_class = KYCSerializer
     permission_classes = [permissions.IsAdminUser]
