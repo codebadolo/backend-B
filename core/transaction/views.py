@@ -55,3 +55,11 @@ class TransactionListView(generics.ListAPIView):
         if transaction_type:
             return Transaction.objects.filter(sender=self.request.user, transaction_type=transaction_type) | Transaction.objects.filter(receiver=self.request.user, transaction_type=transaction_type)
         return Transaction.objects.filter(sender=self.request.user) | Transaction.objects.filter(receiver=self.request.user)
+class UserTransactionListView(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Filter transactions for the current authenticated user (either as sender or receiver)
+        user = self.request.user
+        return Transaction.objects.filter(sender=user) | Transaction.objects.filter(receiver=user)

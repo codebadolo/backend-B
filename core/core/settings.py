@@ -21,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = PROD_SECRET_KEY
-#SECRET_KEY = 'ul!v##s$6a#ud#0%142co4^g7=h!w^ghfyoj%!444i77ydz#ib'
+#SECRET_KEY = PROD_SECRET_KEY
+SECRET_KEY = 'ul!v##s$6a#ud#0%142co4^g7=h!w^ghfyoj%!444i77ydz#ib'
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = True
 ALLOWED_HOSTS = [ '75.119.133.13' 'localhost' , '127.0.0.1']
@@ -76,7 +76,7 @@ MIDDLEWARE = [
 ]
 
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bitprod',
@@ -86,15 +86,15 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+'''
 
 
-
-'''DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}'''
+}
 
 
 '''CSP_DEFAULT_SRC = ["'self'"]

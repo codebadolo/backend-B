@@ -4,6 +4,7 @@ from django_countries.fields import CountryField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+# Profile Model
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
@@ -28,19 +29,11 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
-    @receiver(post_save, sender=User)
-    def create_or_update_user_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.create(user=instance)
-        instance.profile.save()
-
-    @receiver(post_save, sender=User)
-    def create_or_update_user_profile(sender, instance, created, **kwargs):
-        if created:
-            # Create a new profile only if it doesn't exist
-            Profile.objects.get_or_create(user=instance)
-        else:
-            instance.profile.save()
-
-    
+# Signal to create/update Profile automatically when User is created/updated
+@receiver(post_save, sender=User)
+def create_or_update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        # Create a new profile only if it doesn't exist
+        Profile.objects.get_or_create(user=instance)
+    else:
+        instance.profile.save()    

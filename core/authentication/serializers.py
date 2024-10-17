@@ -5,8 +5,8 @@ from .models import Profile
 
 class EmptySerializer(serializers.Serializer):
     pass
-# 
 
+# Profile Serializer for Handling User Profile Information
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -15,6 +15,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             'kyc_document_type', 'kyc_document_image', 'kyc_status'
         )
 
+
+# Serializer Specifically for KYC Information Management
 class KYCSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
@@ -22,6 +24,7 @@ class KYCSerializer(serializers.ModelSerializer):
         read_only_fields = ['kyc_status']
 
 
+# Main User Serializer Including Profile Information
 class UserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
 
@@ -45,11 +48,15 @@ class UserSerializer(serializers.ModelSerializer):
         profile.address = profile_data.get('address', profile.address)
         profile.phone_number = profile_data.get('phone_number', profile.phone_number)
         profile.date_of_birth = profile_data.get('date_of_birth', profile.date_of_birth)
+        profile.kyc_document_type = profile_data.get('kyc_document_type', profile.kyc_document_type)
+        profile.kyc_document_image = profile_data.get('kyc_document_image', profile.kyc_document_image)
+        profile.kyc_status = profile_data.get('kyc_status', profile.kyc_status)
         profile.save()
 
         return instance
 
 
+# Registration Serializer for Creating New Users
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     profile = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -67,4 +74,3 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         # No need to create a profile manually since it's handled by the post_save signal
         return user
-
