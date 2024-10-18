@@ -1,9 +1,13 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from .models import Transaction, Wallet
-from .serializers import DepositSerializer,TransactionSerializer , SendMoneySerializer, WithdrawSerializer
-from rest_framework.permissions import IsAuthenticated
+from .models import Transaction, Wallet , Currency
+from .serializers import (
+DepositSerializer,TransactionSerializer , SendMoneySerializer, WithdrawSerializer ,CurrencySerializer )
+from rest_framework.permissions import IsAuthenticated 
 
+class CurrencyListView(generics.ListAPIView):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer
 # Deposit View
 class DepositView(generics.CreateAPIView):
     serializer_class = DepositSerializer

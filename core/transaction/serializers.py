@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Wallet, Transaction, Currency
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Currency
@@ -56,20 +57,52 @@ class DepositSerializer(serializers.ModelSerializer):
 
 
 class WithdrawSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(write_only=True)
+    email = serializers.EmailField(write_only=True)
+    password = serializers.CharField(write_only=True, style={'input_type': 'password'})
+
     class Meta:
         model = Transaction
-        fields = ['amount']
+        fields = ['username', 'email', 'password', 'amount']
+
+    def validate(self, data):
+        # Extract the username, email, and password from the validated data
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+
+        try:
+            # Check if the user with the given username exists
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User with the specified username does not exist.")
+
+        # Authenticate using the email and password
+        if not authenticate(username=username, password=password) or user.email != email:
+            raise serializers.ValidationError("Invalid email or password.")
+
+        data['user'] = user
+        return data
 
     def create(self, validated_data):
-        user = self.context['request'].user
-        return Transaction.objects.create(
-            user=user,
-            amount=validated_data['amount'],
-            transaction_type='withdraw'
-        )
+        # Get the authenticated user and amount to withdraw
+        user = validated_data['user']
+        amount = validated_data['amount']
 
+        # Perform the withdrawal operation
+        wallet = Wallet.objects.get(user=user)
+        wallet.withdraw(amount)
+
+        # Create the transaction record
+        return Transaction.objects.create(
+            sender=user,
+            amount=amount,
+            transaction_type='withdraw',
+            status='COMPLETED'
+        )
 class SendMoneySerializer(serializers.ModelSerializer):
-    phone_number = serializers.CharField(write_only=True, required=True)  # Accept phone number instead of receiver
+    phone_number = serializers.CharField(write_only=True, required=True)  # Receiver identified by phone number
+    currency = serializers.PrimaryKeyRelatedField(queryset=Currency.objects.all())  # Sender's currency
 
     class Meta:
         model = Transaction
@@ -86,20 +119,29 @@ class SendMoneySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(f"No user found with phone number '{phone_number}'.")
 
         amount = validated_data['amount']
-        currency = validated_data['currency']
-
+        sender_currency = validated_data['currency']
+        
+        # Fetch the receiver's wallet and currency
         sender_wallet = Wallet.objects.get(user=sender)
         receiver_wallet = Wallet.objects.get(user=receiver)
+        receiver_currency = receiver_wallet.currency
+
+        # Convert amount from sender's currency to receiver's currency
+        conversion_rate = sender_currency.exchange_rate_to_usd / receiver_currency.exchange_rate_to_usd
+        converted_amount = amount * conversion_rate
 
         if sender_wallet.balance >= amount:
+            # Deduct the amount from the sender and convert it to receiver's currency
             sender_wallet.withdraw(amount)
-            receiver_wallet.deposit(amount, currency)
+            receiver_wallet.deposit(converted_amount, receiver_currency)
+            
+            # Create and return the transaction
             return Transaction.objects.create(
                 sender=sender,
                 receiver=receiver,
-                amount=amount,
+                amount=converted_amount,
                 transaction_type='send',
-                currency=currency,
+                currency=receiver_currency,
                 status='COMPLETED'
             )
         else:
