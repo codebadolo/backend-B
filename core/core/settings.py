@@ -76,7 +76,7 @@ MIDDLEWARE = [
 ]
 
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bitprod',
@@ -85,17 +85,17 @@ DATABASES = {
         'HOST': '75.119.133.13',  # Or another host if the database is remote
         'PORT': '5432',
     }
-}
+}'''
 
 
-'''
-DATABASES = {
+
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
-'''
+}'''
+
 
 '''CSP_DEFAULT_SRC = ["'self'"]
 CSP_STYLE_SRC = ["'self'", 'maxcdn.bootstrapcdn.com']
