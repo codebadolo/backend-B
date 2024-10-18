@@ -48,6 +48,6 @@ class Transaction(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=[('PENDING', 'Pending'), ('COMPLETED', 'Completed')], default='PENDING')
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES, default='deposit')
-
+    fee = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal('0.00'))
     def __str__(self):
         return f'Transaction {self.transaction_type} of {self.amount} from {self.sender} to {self.receiver}'

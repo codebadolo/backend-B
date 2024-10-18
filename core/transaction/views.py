@@ -1,8 +1,12 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from .models import Transaction, Wallet , Currency
+from rest_framework.views import APIView
 from .serializers import (
-DepositSerializer,TransactionSerializer , SendMoneySerializer, WithdrawSerializer ,CurrencySerializer )
+DepositSerializer,TransactionSerializer , 
+SendMoneySerializer, WithdrawSerializer ,
+
+CurrencySerializer ,PreviewTransferFeeSerializer )
 from rest_framework.permissions import IsAuthenticated 
 
 class CurrencyListView(generics.ListAPIView):
@@ -67,3 +71,19 @@ class UserTransactionListView(generics.ListAPIView):
         # Filter transactions for the current authenticated user (either as sender or receiver)
         user = self.request.user
         return Transaction.objects.filter(sender=user) | Transaction.objects.filter(receiver=user)
+    
+    
+
+class PreviewTransferFeeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = PreviewTransferFeeSerializer(data=request.data)
+        if serializer.is_valid():
+            sender = request.user
+            amount = serializer.validated_data['amount']
+            currency = serializer.validated_data['currency']
+            
+            fee_details = serializer.get_fee_preview(sender, amount, currency)
+            return Response(fee_details)
+        return Response(serializer.errors, status=400)    
