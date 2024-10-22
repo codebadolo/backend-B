@@ -11,6 +11,13 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import Profile 
 from rest_framework import generics
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from django.contrib.auth.models import User
+from .models import APIKey
+from .serializers import APIKeySerializer
+from rest_framework.views import APIView
+
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework.permissions import IsAuthenticated
@@ -99,3 +106,40 @@ class KYCAdminApprovalView(generics.UpdateAPIView):
             return Response({'message': f'KYC status set to {status}'}, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid KYC status'}, status=status.HTTP_400_BAD_REQUEST)
     
+
+class GenerateAPIKeyView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        api_key, created = APIKey.objects.get_or_create(user=user)
+        if not created:
+            api_key.key = APIKey.generate_key()
+            api_key.save()
+        return Response({"api_key": api_key.key}, status=status.HTTP_201_CREATED)
+
+class ResetAPIKeyView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        try:
+            api_key = user.api_key
+            api_key.key = APIKey.generate_key()
+            api_key.save()
+            return Response({"api_key": api_key.key}, status=status.HTTP_200_OK)
+        except APIKey.DoesNotExist:
+            return Response({"error": "API key not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class RevokeAPIKeyView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        try:
+            api_key = user.api_key
+            api_key.is_active = False
+            api_key.save()
+            return Response({"message": "API key revoked"}, status=status.HTTP_200_OK)
+        except APIKey.DoesNotExist:
+            return Response({"error": "API key not found"}, status=status.HTTP_404_NOT_FOUND)

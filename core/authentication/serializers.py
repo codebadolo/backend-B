@@ -74,3 +74,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         # No need to create a profile manually since it's handled by the post_save signal
         return user
+
+from rest_framework import serializers
+from .models import APIKey
+
+class APIKeySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = APIKey
+        fields = ['key', 'is_active', 'created_at']
