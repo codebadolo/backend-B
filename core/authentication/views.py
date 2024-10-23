@@ -24,6 +24,18 @@ from rest_framework.permissions import IsAuthenticated
 # View to retrieve and update the user's profile
 # 
 # 
+class UserDetailView(APIView):
+    def get(self, request):
+        user_id = request.query_params.get('user_id')
+        if not user_id:
+            return Response({"error": "User ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            user = User.objects.get(id=user_id)
+            serializer = UserSerializer(user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
 # Dummy Serializer for LogoutView (used for documentation purposes)
 

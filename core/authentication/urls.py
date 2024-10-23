@@ -2,7 +2,7 @@ from django.urls import path
 from .views import ( UserProfileView  , RegisterView, 
                     LoginView, LogoutView , KYCSubmissionView , 
                     KYCAdminApprovalView ,GenerateAPIKeyView,
-                    ResetAPIKeyView, RevokeAPIKeyView
+                    ResetAPIKeyView, RevokeAPIKeyView ,UserDetailView
                     
 )
 from rest_framework_simplejwt.views import TokenRefreshView
@@ -16,6 +16,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
      path('kyc/', KYCSubmissionView.as_view(), name='kyc-submission'),
     # Admin can approve or reject KYC
+    path('api/user/details/',UserDetailView.as_view(), name='user_details'),
     path('kyc/admin/<int:user_id>/', KYCAdminApprovalView.as_view(), name='kyc-admin-approval'),
     path('api-key/generate/', GenerateAPIKeyView.as_view(), name='generate-api-key'),
     path('api-key/reset/', ResetAPIKeyView.as_view(), name='reset-api-key'),

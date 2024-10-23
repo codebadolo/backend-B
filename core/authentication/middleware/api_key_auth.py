@@ -1,6 +1,5 @@
-
 from django.http import JsonResponse
-from ..models import APIKey  # Import your APIKey model
+from authentication.models import APIKey
 
 class APIKeyAuthMiddleware:
     def __init__(self, get_response):
