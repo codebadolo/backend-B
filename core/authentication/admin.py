@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Profile , APIKey
+from .models import Profile 
 from django.utils.html import format_html
 
-admin.site.register(APIKey)
+
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('profile_image_tag' , 'user', 'kyc_status', 'kyc_document_type', 'country', 'city')

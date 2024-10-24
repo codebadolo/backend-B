@@ -72,7 +72,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
        #'csp.middleware.CSPMiddleware',  # Add this middleware directly
     'django_auto_logout.middleware.auto_logout',
-    'authentication.middleware.api_key_auth.APIKeyAuthMiddleware',  # Make sure to use the correct path
+    # Make sure to use the correct path
    
 ]
 

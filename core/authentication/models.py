@@ -41,23 +41,3 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     else:
         instance.profile.save()    
         
-class APIKey(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="api_key")
-    key = models.CharField(max_length=100, unique=True, editable=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
-
-    def save(self, *args, **kwargs):
-        if not self.key:
-            self.key = self.generate_key()
-        super().save(*args, **kwargs)
-
-    @staticmethod
-    def generate_key():
-        return str(uuid.uuid4()).replace("-", "")        
-    
-    
-@receiver(post_save, sender=User)
-def create_user_api_key(sender, instance, created, **kwargs):
-    if created:
-        APIKey.objects.create(user=instance)    

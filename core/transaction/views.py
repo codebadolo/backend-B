@@ -8,7 +8,7 @@ SendMoneySerializer, WithdrawSerializer ,
 
 CurrencySerializer ,PreviewTransferFeeSerializer )
 from rest_framework.permissions import IsAuthenticated 
-
+from django.contrib.auth.models import User
 class CurrencyListView(generics.ListAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
@@ -55,14 +55,21 @@ class SendMoneyView(generics.CreateAPIView):
             raise serializers.ValidationError("Insufficient balance.")
 
 class TransactionListView(generics.ListAPIView):
-    serializer_class = TransactionSerializer  # Explicitly defining the serializer class
+    serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        transaction_type = self.request.query_params.get('transaction_type')
-        if transaction_type:
-            return Transaction.objects.filter(sender=self.request.user, transaction_type=transaction_type) | Transaction.objects.filter(receiver=self.request.user, transaction_type=transaction_type)
-        return Transaction.objects.filter(sender=self.request.user) | Transaction.objects.filter(receiver=self.request.user)
+        # Retrieve `user_id` from query params or use current user
+        user_id = self.request.query_params.get('user_id', self.request.user.id)
+        try:
+            user = User.objects.get(id=user_id)
+            transaction_type = self.request.query_params.get('transaction_type')
+            if transaction_type:
+                return Transaction.objects.filter(sender=user, transaction_type=transaction_type) | Transaction.objects.filter(receiver=user, transaction_type=transaction_type)
+            return Transaction.objects.filter(sender=user) | Transaction.objects.filter(receiver=user)
+        except User.DoesNotExist:
+            return Transaction.objects.none()
+        
 class UserTransactionListView(generics.ListAPIView):
     serializer_class = TransactionSerializer
     permission_classes = [IsAuthenticated]
@@ -87,3 +94,36 @@ class PreviewTransferFeeView(APIView):
             fee_details = serializer.get_fee_preview(sender, amount, currency)
             return Response(fee_details)
         return Response(serializer.errors, status=400)    
+    
+class MyTransactionsView(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Retrieve user_id from the URL, if provided
+        user_id = self.kwargs.get('user_id')
+
+        try:
+            # If user_id is provided, fetch transactions for that user
+            if user_id:
+                user = User.objects.get(id=user_id)
+            else:
+                # Default to authenticated user if no user_id is provided
+                user = self.request.user
+
+            # Return all transactions where the user is either the sender or receiver
+            return Transaction.objects.filter(sender=user) | Transaction.objects.filter(receiver=user)
+        except User.DoesNotExist:
+            return Transaction.objects.none()
+
+    def list(self, request, *args, **kwargs):
+        user_id = self.kwargs.get('user_id')
+
+        # Check if the user exists
+        if user_id:
+            try:
+                User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        return super().list(request, *args, **kwargs)
