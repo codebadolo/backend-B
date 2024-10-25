@@ -76,8 +76,7 @@ MIDDLEWARE = [
    
 ]
 
-
-'''DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bitprod',
@@ -86,7 +85,7 @@ MIDDLEWARE = [
         'HOST': '75.119.133.13',  # Or another host if the database is remote
         'PORT': '5432',
     }
-}'''
+}
 
 '''
 DATABASES = {
@@ -102,12 +101,6 @@ CSP_STYLE_SRC = ["'self'", 'maxcdn.bootstrapcdn.com']
 CSP_SCRIPT_SRC = ["'self'", 'code.jquery.com']
 '''
 
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_HSTS_SECONDS = 31536000  # Enforce HTTPS for one year
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-CSRF_COOKIE_SECURE = False
 
 
 
@@ -202,16 +195,8 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_HTTPONLY = True
 
-CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = [
-    'http://75.119.133.13',
-    'http://127.0.0.1',
-      'http://localhost',
-    # Add other trusted origins here
-]
+
 
 '''SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
