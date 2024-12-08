@@ -35,48 +35,43 @@ DEBUG = True
 
 INSTALLED_APPS = [
         
-   # 'jazzmin',  # Add this at the top of your installed apps
-       'corsheaders',
+    # 'jazzmin',  # Add this at the top of your installed apps
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
-       'rest_framework',  # Make sure this is included
+    'rest_framework',  # Make sure this is included
     'django_countries',
-    
-    
-    
-    
-     'drf_spectacular',
+    'drf_spectacular',
     'authentication',
-
-     'transaction',
-        'drf_yasg',
+    'transaction',
+    'drf_yasg',
         
 ]
 
 MIDDLEWARE = [
 
-        'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
- #   'django.middleware.csrf.CsrfViewMiddleware',
+    #   'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-       #'csp.middleware.CSPMiddleware',  # Add this middleware directly
+    #'csp.middleware.CSPMiddleware',  # Add this middleware directly
     'django_auto_logout.middleware.auto_logout',
     # Make sure to use the correct path
    
 ]
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bitprod',
@@ -86,20 +81,14 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
 '''
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-'''
-
-'''CSP_DEFAULT_SRC = ["'self'"]
-CSP_STYLE_SRC = ["'self'", 'maxcdn.bootstrapcdn.com']
-CSP_SCRIPT_SRC = ["'self'", 'code.jquery.com']
-'''
 
 
 
@@ -198,15 +187,7 @@ SIMPLE_JWT = {
 
 
 
-'''SWAGGER_SETTINGS = {
-    'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic'
-        }
-    },
-   # 'LOGIN_URL': 'rest_framework:login',  # Configuring login URL for Swagger
-  #  'LOGOUT_URL': 'rest_framework:logout',  # Configuring logout URL for Swagger
-}'''
+
 
 REDOC_SETTINGS = {
     'LAZY_RENDERING': True,
@@ -229,26 +210,8 @@ SPECTACULAR_SETTINGS = {
 
 }
 
-'''JAZZMIN_SETTINGS = {
-    "site_title": "BIT Admin",
-    "site_header": "BIT Administration",
-    "welcome_sign": "Welcome to BIT Admin",
-    "site_logo": "path_to_logo/logo.png",
-    "user_avatar": "path_to_profile_image",  # If you have a profile image for the user
-    "show_sidebar": True,
-    "navigation_expanded": True,
-    "icons": {
-        "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user",
-        "auth.Group": "fas fa-users",
-        "transactions.Wallet": "fas fa-wallet",
-        "transactions.Transaction": "fas fa-exchange-alt",
-        "transactions.Currency": "fas fa-coins",
-    },
-    "custom_css": "custom.css",  # Add your custom CSS file if needed
-    "custom_js": "custom.js",  # Add your custom JS file if needed
-}
-'''
+
+
 
 
 CORS_ALLOW_ALL_ORIGINS = True

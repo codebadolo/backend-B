@@ -1,5 +1,5 @@
-from .settings import *
-from .keep_safe import PROD_SECRET_KEY   , PROD_DATABASE_PASSWORD# Corrected the import statement
+from .core.core.settings import *
+from .core.core.keep_safe import PROD_SECRET_KEY   , PROD_DATABASE_PASSWORD# Corrected the import statement
 
 # Use the imported PROD_SECRET_KEY
 SECRET_KEY = PROD_SECRET_KEY

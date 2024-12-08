@@ -10,7 +10,6 @@ urlpatterns = [
     path('transaction/send/', SendMoneyView.as_view(), name='transaction-send'),
     path('transaction/my-transactions/<int:user_id>/', MyTransactionsView.as_view(), name='my-transactions'),
     path('transaction/transactions/', TransactionListView.as_view(), name='transaction-list'),
-    
   
     path('transaction/my-transactions/', MyTransactionsView.as_view(), name='my-transactions'),
     path('transaction/my-transactions/<int:user_id>/', MyTransactionsView.as_view(), name='user-transactions'),

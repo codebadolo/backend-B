@@ -1,4 +1,3 @@
-from rest_framework import generics, permissions
 from django.contrib.auth.models import User
 from .serializers import UserSerializer , KYCSerializer, EmptySerializer
 from rest_framework import generics, permissions, status
@@ -10,9 +9,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import Profile 
-from rest_framework import generics
-from rest_framework import generics, permissions, status
-from rest_framework.response import Response
+
+
 from django.contrib.auth.models import User
 
 from rest_framework.views import APIView
