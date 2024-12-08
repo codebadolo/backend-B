@@ -9,18 +9,13 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import Profile 
-
-
 from django.contrib.auth.models import User
-
 from rest_framework.views import APIView
-
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework.permissions import IsAuthenticated
 # View to retrieve and update the user's profile
 # Dummy Serializer for LogoutView (used for documentation purposes)
-
 class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -50,17 +45,6 @@ class RegisterView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]  # Allow anyone to register
 
 class LoginView(TokenObtainPairView):
-    '''    @swagger_auto_schema(
-        operation_description="Login to the application to obtain access and refresh tokens",
-        request_body=openapi.Schema(
-            type=openapi.TYPE_OBJECT,
-            properties={
-                'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
-                'password': openapi.Schema(type=openapi.TYPE_STRING, description='Password')
-            }
-        ),
-        responses={200: openapi.Response('Success')}
-    )'''
     def post(self, request, *args, **kwargs):
         return super().post(request, *args, **kwargs)
     
