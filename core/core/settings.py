@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'authentication',
     'transaction',
     'drf_yasg',
+    'django_extensions',
         
 ]
 
@@ -70,6 +71,10 @@ MIDDLEWARE = [
     # Make sure to use the correct path
    
 ]
+GRAPH_MODELS ={
+    'all_applications': True,
+    'graph_models': True,
+     }
 
 '''DATABASES = {
     'default': {

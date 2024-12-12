@@ -5,10 +5,10 @@ from rest_framework.views import APIView
 from .serializers import (
 DepositSerializer,TransactionSerializer , 
 SendMoneySerializer, WithdrawSerializer ,
-
 CurrencySerializer ,PreviewTransferFeeSerializer )
 from rest_framework.permissions import IsAuthenticated 
 from django.contrib.auth.models import User
+
 class CurrencyListView(generics.ListAPIView):
     queryset = Currency.objects.all()
     serializer_class = CurrencySerializer
